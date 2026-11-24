@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amma Home Food</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #fff8f3;
+            color: #2c2c2c;
+        }
+
+        header {
+            background-color: #b71c1c;
+            color: #ffffff;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        header p {
+            margin-top: 0.4rem;
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 1100px;
+            margin: 2rem auto;
+            gap: 2rem;
+            padding: 0 1rem;
+        }
+
+        .menu-section {
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .menu-section h2 {
+            margin-bottom: 1rem;
+            color: #b71c1c;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 1.2rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #b71c1c;
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 0.6rem;
+            background-color: #d84315;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .add-btn:hover {
+            background-color: #bf360c;
+        }
+
+        .cart-section {
+            flex: 1;
+            min-width: 280px;
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+
+        .cart-section h2 {
+            margin-bottom: 1rem;
+            color: #2c2c2c;
+        }
+
+        #cart-items {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        #cart-items li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #eeeeee;
+            font-size: 0.95rem;
+            gap: 0.5rem;
+        }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .qty-btn {
+            background-color: #f0f0f0;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            width: 24px;
+            height: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .qty-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #c62828;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 4px;
+        }
+
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            margin: 0.4rem 0;
+            color: #555555;
+        }
+
+        .total-box {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.15rem;
+            font-weight: bold;
+            margin: 0.8rem 0 1rem;
+            padding-top: 0.6rem;
+            border-top: 1px solid #dddddd;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 0.65rem;
+            margin-bottom: 0.8rem;
+            border: 1px solid #cccccc;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .whatsapp-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #25d366;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #1ebe5d;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Welcome to Amma Home Food</h1>
+        <p>Authentic South Indian Non-Veg Delicacies — Freshly cooked with love, traditional spices, and zero
+            preservatives</p>
+    </header>
+
+    <div class="container">
+        <section class="menu-section">
+            <h2>Today's Menu</h2>
+            <div class="menu-grid" id="menu-grid"></div>
+        </section>
+
+        <aside class="cart-section">
+            <h2>Your Order</h2>
+            <ul id="cart-items">
+                <li>No items added yet</li>
+            </ul>
+
+            <div class="summary-line">
+                <span>Subtotal:</span>
+                <span>₹<span id="subtotal-amount">0</span></span>
+            </div>
+            <div class="summary-line">
+                <span>Delivery Charge:</span>
+                <span>₹<span id="delivery-amount">0</span></span>
+            </div>
+            <div class="total-box">
+                <span>Total:</span>
+                <span>₹<span id="total-amount">0</span></span>
+            </div>
+
+            <input type="text" id="cust-name" placeholder="Customer Name">
+            <input type="tel" id="cust-phone" placeholder="Customer Phone Number">
+            <textarea id="cust-address" rows="3" placeholder="Delivery Address"></textarea>
+
+            <button class="whatsapp-btn" onclick="sendWhatsAppOrder()">Order via WhatsApp</button>
+            <button class="sms-btn" onclick="sendSMSOrder()">Order via SMS</button>
+        </aside>
+    </div>
+
+    <script>
+        const dishes = [
+            { id: 1, name: "South Indian Chicken Biryani (Half)", price: 99, image: "images/biriyani.jpeg" },
+            { id: 2, name: "South Indian Chicken Biryani (Full)", price: 149, image: "images/biriyani.jpeg" },
+            { id: 3, name: "Homemade Chicken Fry (Half)", price: 89, image: "images/chikenfry.jpeg" },
+            { id: 4, name: "Homemade Chicken Fry (Full)", price: 129, image: "images/chikenfry.jpeg" },
+            { id: 5, name: "Chicken Kabab (Half - 5 pcs)", price: 69, image: "images/kabab.jpeg" },
+            { id: 6, name: "Chicken Kabab (Full - 10 pcs)", price: 109, image: "images/kabab.jpeg" },
+            { id: 7, name: "Kushka (Half)", price: 59, image: "images/kushka.jpeg" },
+            { id: 8, name: "Kushka (Full)", price: 89, image: "images/kushka.jpeg" }
+        ];
+
+        const FREE_DELIVERY_MIN = 299;
+        const DELIVERY_FEE = 30;
+
+        let cart = [];
+
+        const menuGrid = document.getElementById("menu-grid");
+        dishes.forEach(dish => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+            <img src="${dish.image}" alt="${dish.name}" style="width: 100%; height: 240px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
+                <h3>${dish.name}</h3>
+                <div class="price">₹${dish.price}</div>
+                <button class="add-btn" onclick="addDish(${dish.id})">Add to Order</button>
+            `;
+            menuGrid.appendChild(card);
+        });
+
+        function addDish(id) {
+            const existing = cart.find(item => item.id === id);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                const found = dishes.find(d => d.id === id);
+                if (found) {
+                    cart.push({ ...found, qty: 1 });
+                }
+            }
+            renderCart();
+        }
+
+        function changeQty(index, delta) {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            renderCart();
+        }
+
+        function removeDish(index) {
+            cart.splice(index, 1);
+            renderCart();
+        }
+
+        function renderCart() {
+            const cartList = document.getElementById("cart-items");
+            const subtotalEl = document.getElementById("subtotal-amount");
+            const deliveryEl = document.getElementById("delivery-amount");
+            const totalEl = document.getElementById("total-amount");
+
+            cartList.innerHTML = "";
+
+            if (cart.length === 0) {
+                cartList.innerHTML = "<li>No items added yet</li>";
+                subtotalEl.textContent = "0";
+                deliveryEl.textContent = "0";
+                totalEl.textContent = "0";
+                return;
+            }
+
+            let subtotal = 0;
+            cart.forEach((item, idx) => {
+                const itemTotal = item.price * item.qty;
+                subtotal += itemTotal;
+
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <div>
+                        <div><strong>${item.name}</strong></div>
+                        <small>₹${item.price} x ${item.qty} = ₹${itemTotal}</small>
+                    </div>
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="changeQty(${idx}, -1)">-</button>
+                        <span>${item.qty}</span>
+                        <button class="qty-btn" onclick="changeQty(${idx}, 1)">+</button>
+                        <button class="remove-btn" onclick="removeDish(${idx})">✕</button>
+                    </div>
+                `;
+                cartList.appendChild(li);
+            });
+
+            const delivery = subtotal >= FREE_DELIVERY_MIN ? 0 : DELIVERY_FEE;
+            const total = subtotal + delivery;
+
+            subtotalEl.textContent = subtotal;
+            deliveryEl.textContent = delivery;
+            totalEl.textContent = total;
+        }
+
+        function sendWhatsAppOrder() {
+            const name = document.getElementById("cust-name").value.trim();
+            const custPhone = document.getElementById("cust-phone").value.trim();
+            const address = document.getElementById("cust-address").value.trim();
+
+            if (cart.length === 0) {
+                alert("Please add at least one dish to your order.");
+                return;
+            }
+            if (!name || !custPhone || !address) {
+                alert("Please enter your name, phone number, and delivery address.");
+                return;
+            }
+
+            let message = `*New Order - Amma Home Food*\n\n`;
+            message += `*Name:* ${name}\n`;
+            message += `*Phone:* ${custPhone}\n`;
+            message += `*Address:* ${address}\n\n*Items:*\n`;
+
+            let subtotal = 0;
+            cart.forEach(item => {
+                const itemTotal = item.price * item.qty;
+                message += `• ${item.name} x${item.qty} — ₹${itemTotal}\n`;
+                subtotal += itemTotal;
+            });
+
+            const delivery = subtotal >= FREE_DELIVERY_MIN ? 0 : DELIVERY_FEE;
+            const total = subtotal + delivery;
+
+            message += `\n*Subtotal:* ₹${subtotal}`;
+            message += `\n*Delivery Charge:* ₹${delivery}`;
+            message += `\n*Total Amount:* ₹${total}`;
+
+            // Replace 917204600508 with your 10-digit mobile number prefixed with 91
+            const phone = "917204600508";
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, "_blank");
+        }
+    </script>
+
+</body>
+
+</html>
